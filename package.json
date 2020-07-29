@@ -1,0 +1,31 @@
+{
+  "name": "chatty-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./build/index.js",
+  "scripts": {
+    "tsc": "tsc",
+    "lint": "tslint --project tsconfig.json",
+    "dev": "ts-node-dev --respawn ./src/index.ts",
+    "start": "node ./build/index.js",
+    "prebuild": "npm run lint",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Paolo Infante <info@paoloinfante.it> (https://paoloinfante.it)",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.7",
+    "@types/socket.io": "^2.1.10",
+    "prettier": "^2.0.5",
+    "ts-node-dev": "^1.0.0-pre.56",
+    "tslint": "^6.1.2",
+    "tslint-config-airbnb": "^5.11.2",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.9.7"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
+  }
+}

@@ -1,12 +1,15 @@
 import express from 'express';
 import http from 'http';
 import socketIo from 'socket.io';
+import { Client } from './client/Client';
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIo.listen(server);
 
 const PORT = process.env.PORT || 4575;
+
+const connectedClients: Client[] = [];
 
 io.use((socket, next) => {
   // Check for name in the connection query
@@ -18,6 +21,12 @@ io.use((socket, next) => {
 });
 
 io.on('connection', (socket) => {
+  // Add client to connection pool
+  connectedClients.push({
+    name: socket.handshake.query.author,
+    ip: socket.client.conn.remoteAddress,
+  });
+
   // On message
   socket.on('chat_message', (msg: string) => {
     if (msg.length > 0) {
@@ -38,7 +47,14 @@ io.on('connection', (socket) => {
 
   // On disconnection
   socket.on('disconnect', () => {
-    //
+    // Remove client from connection pool
+    connectedClients.splice(
+      connectedClients.indexOf({
+        name: socket.handshake.query.author,
+        ip: socket.client.conn.remoteAddress,
+      }),
+      1
+    );
   });
 });
 

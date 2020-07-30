@@ -6,6 +6,7 @@ COPY package*.json ./
 USER node
 RUN npm install
 COPY . .
-RUN npm build
-EXPOSE 8080
+ENV NODE_ENV production
+RUN npm run build
+EXPOSE 4575
 CMD [ "npm", "start" ]

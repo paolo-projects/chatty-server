@@ -2,7 +2,7 @@ import { Client } from './Client';
 import crypto from 'crypto';
 
 export default class ClientManager {
-  clients: Map<string, Client>;
+  private clients: Map<string, Client>;
 
   constructor() {
     this.clients = new Map();
@@ -16,5 +16,15 @@ export default class ClientManager {
 
   remove(hash: string) {
     this.clients.delete(hash);
+  }
+
+  getClients() {
+    return Array.from(
+      this.clients.entries()
+    ).map(([hash, client]: [string, Client]) => ({ ...client, hash }));
+  }
+
+  count() {
+    return this.clients.size;
   }
 }

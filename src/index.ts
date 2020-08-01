@@ -24,7 +24,7 @@ const clientManager = new ClientManager();
 // Check if connected clients are too many
 io.use((socket, next) => {
   if (clientManager.count() + 1 > CONNECTED_CLIENTS_LIMIT) {
-    return next(new Error('Clients pool full'));
+    return next(new Error('cant_accept'));
   }
   return next();
 });
@@ -35,7 +35,17 @@ io.use((socket, next) => {
   if (name && name.length > 1) {
     return next();
   }
-  return next(new Error('Bad name provided'));
+  return next(new Error('no_name'));
+});
+
+io.use((socket, next) => {
+  // Drop connection if the name is already taken
+  const messageAuthor = socket.handshake.query.author;
+
+  if (clientManager.hasName(messageAuthor)) {
+    return next(new Error('name_taken'));
+  }
+  return next();
 });
 
 io.on('connection', (socket) => {

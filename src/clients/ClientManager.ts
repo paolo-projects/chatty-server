@@ -21,7 +21,13 @@ export default class ClientManager {
   getClients() {
     return Array.from(
       this.clients.entries()
-    ).map(([hash, client]: [string, Client]) => ({ ...client, hash }));
+    ).map(([hash, client]: [string, Client]) => ({ hash, name: client.name }));
+  }
+
+  hasName(name: string): boolean {
+    return Array.from(this.clients.values()).some(
+      (client) => name.trim() === client.name.trim()
+    );
   }
 
   count() {
